@@ -69,9 +69,8 @@ for time in range(0,10):
     nhibiteurs, activateurs = updateEnzyme(inhibiteurs,activateurs)
     matrix = updateMatrix(inhibiteurs, activateurs, matrix)
 
-print(matrix)
-
-
+plt.matshow(matrix,cmap='Oranges')
+plt.show()
 
 
 
