@@ -61,17 +61,11 @@ activateurs = np.array([[1, 2], [8, 7]])
 
 #update à t0
 matrix = updateMatrix(inhibiteurs, activateurs, matrix)
-(inhibiteurs,activateurs) = updateEnzyme(inhibiteurs,activateurs)
 
 # dispersion
 for time in range(0,10):
-    #dispersion
-    nhibiteurs, activateurs = updateEnzyme(inhibiteurs,activateurs)
+    inhibiteurs, activateurs = updateEnzyme(inhibiteurs,activateurs)
     matrix = updateMatrix(inhibiteurs, activateurs, matrix)
 
 plt.matshow(matrix,cmap='Oranges')
 plt.show()
-
-
-
-
