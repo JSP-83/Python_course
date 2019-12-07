@@ -1,71 +1,59 @@
-import scipy as sc
-import numpy as np
-import random as rd
-import matplotlib.pyplot as plt
+def updateImage(*args):
+	x = rd.randint(0,9)
+	y = rd.randint(0,9)
+	grille[x,y] = 255
+	print("surface après :",round((time.time()-t0)),"secondes")
+	image.set_data(grille)
+	return image
 
-#MAJ coord enzymes
-def moveEnzyme(coord):
-    rx = rd.randint(0,1)
-    ry = rd.randint(0,1)
+def inputParameters():
+	global inputDim, inhibiteurs, activateurs, grille, image, t0, fig
+	# paramètres d'entrée
+	inputDim = input("Entrez une dimension (entier) : ")
+	inputDim = int(inputDim)
 
-    if rx == 1:
-        if coord[0] == 9:
-            coord[0] = 9
-        else:
-            coord[0]+=1
+	# grille
+	fig, ax = plt.subplots()
+	grille = np.zeros((inputDim,inputDim),dtype=int)
 
-    else:
-        if coord[0] == 0:
-            coord[0] = 0
-        else:
-            coord[0]-=1
+	# premières tâches
+	stop = 0
+	while(stop == 0):
+		firstPointX = input("Entrez une abscisse (entier) : ")
+		firstPointX = int(firstPointX)
+		while(not firstPointX >= 0 or not firstPointX <= (inputDim-1)):
+			firstPointX = input("La valeur est hors des dimensions de la surface, rééssayez : ")
+			firstPointX = int(firstPointX)
+		firstPointY = input("Entrez une ordonnée (entier) : ")
+		firstPointY = int(firstPointY)
+		while(not firstPointY >= 0 or not firstPointY <= (inputDim-1)):
+			firstPointY = input("La valeur est hors des dimensions de la surface, rééssayez : ")
+			firstPointY = int(firstPointY)
 
-    if ry == 1:
-        if coord[1] == 9:
-            coord[1] = 9
-        else:
-            coord[1] += 1
+		#Enzymes
+		if ('testStop' in locals()):
+			inhibiteurs,  activateurs =  addCoordEnzyme(inhibiteurs,activateurs,grille,firstPointX,firstPointY)	
+		else:
+			inhibiteurs = np.array([firstPointX, firstPointY])
+			activateurs = np.array([firstPointX, firstPointY])
+			grille[firstPointX,firstPointY] = 255
+			
 
-    else:
-        if coord[1] == 0:
-            coord[1] = 0
-        else:
-            coord[1] -= 1
+		testStop = input("Voulez-vous entrer une nouvelle tâche ? [y/n] : ")
+		while (not testStop in ['n','N','Y','y']):
+			testStop = input("Je n'ai pas compris, rééssayez : [y/n] : ")
 
-    return coord
+		if testStop in ['n','N']:
+			stop = 1
 
-#MAJ Matrice de peau
-def updateMatrix(inhibiteurs,activateurs,matrix):
-    for x, y in inhibiteurs:
-        for x2, y2 in activateurs:
-            if (x, y) == (x2, y2):
-                matrix[x, y] = 1
+	#création de l'image
+	image = ax.imshow(grille, interpolation='nearest',cmap='Oranges')
+	print("A l'initiale : ")
+	print(grille)
+	t0 = time.time();
 
-    return matrix
+inputParameters()
 
-#MAJ Enzymes
-def updateEnzyme(inhibiteurs,activateurs):
-
-    for i,coordI in enumerate(inhibiteurs):
-        coordI = moveEnzyme(coordI)
-
-    for i,coordA in enumerate(activateurs):
-        coordA = moveEnzyme(coordA)
-
-    return inhibiteurs,activateurs
-
-#--------paramètres d'entrées--------
-matrix = sc.zeros((10, 10))  # matrice des taches
-inhibiteurs = np.array([[1, 2], [8, 8], [8, 7]])
-activateurs = np.array([[1, 2], [8, 7]])
-
-#update à t0
-matrix = updateMatrix(inhibiteurs, activateurs, matrix)
-
-# dispersion
-for time in range(0,10):
-    inhibiteurs, activateurs = updateEnzyme(inhibiteurs,activateurs)
-    matrix = updateMatrix(inhibiteurs, activateurs, matrix)
-
-plt.matshow(matrix,cmap='Oranges')
+# animation
+ani = animation.FuncAnimation(fig, updateImage, fargs=(image,grille,inputDim,inhibiteurs,activateurs,t0), frames = inputDim, interval=2000, save_count=50) 
 plt.show()
