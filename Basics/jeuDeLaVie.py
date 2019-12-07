@@ -1,3 +1,10 @@
+import scipy as sc
+import numpy as np
+import random as rd
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import time
+
 def updateImage(*args):
 	x = rd.randint(0,9)
 	y = rd.randint(0,9)
