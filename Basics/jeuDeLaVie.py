@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
 
+def addCoordEnzyme(inhibiteurs,activateurs,grille,firstPointX,firstPointY):
+	inhibiteurs = np.insert(inhibiteurs, 0, np.array([firstPointX, firstPointY]))
+	activateurs = np.insert(activateurs, 0, np.array([firstPointX, firstPointY]))
+	grille[firstPointX,firstPointY] = 255
+	return inhibiteurs,activateurs
+
 def updateImage(*args):
 	x = rd.randint(0,9)
 	y = rd.randint(0,9)
