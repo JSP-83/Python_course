@@ -44,16 +44,17 @@ def updateEnzymes(inhibiteurs, activateurs, inputDim, testCoeff,coeff):
 	elif testCoeff == 0:
 		i = 0
 		while(i<coeff):
-			activateurs = updateEnzymeRandom(activateurs, inputDim)
+			inhibiteurs = updateEnzymeRandom(inhibiteurs, inputDim)
 			i+=1
-		inhibiteurs = updateEnzymeRandom(inhibiteurs, inputDim)
+		activateurs = updateEnzymeRandom(activateurs, inputDim)
 
 	elif testCoeff == 1:
 		i = 0
 		while(i<coeff):
-			inhibiteurs = updateEnzymeRandom(inhibiteurs, inputDim)
-			i+=1	
-		activateurs = updateEnzymeRandom(activateurs, inputDim)
+			activateurs = updateEnzymeRandom(activateurs, inputDim)
+			i+=1
+		inhibiteurs = updateEnzymeRandom(inhibiteurs, inputDim)	
+		
 
 	print("coordonnées inhibiteurs : ",inhibiteurs)
 	print("coordonnées activateurs : ",activateurs)
